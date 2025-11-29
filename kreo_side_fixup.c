@@ -13,6 +13,7 @@
 
 #define KREO_VID 0x248a
 #define KREO_PID 0x5b4a
+#define KREO_PID_WIRED 0x5b49
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("BuzzingTaz");
@@ -22,7 +23,8 @@ static const __u8 *kreo_report_fixup(struct hid_device *hdev, __u8 *rdesc,
                                      unsigned int *rsize) {
   struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
 
-  // Interface 0 corresponds to the actual mouse behaviour (output from `lsusb -v`)
+  // Interface 0 corresponds to the "mouse" behaviour of the device
+  // (output from `lsusb -v`)
   if (intf->cur_altsetting->desc.bInterfaceNumber != 0)
     return rdesc;
 
@@ -40,14 +42,13 @@ static const __u8 *kreo_report_fixup(struct hid_device *hdev, __u8 *rdesc,
 static int kreo_probe(struct hid_device *hdev, const struct hid_device_id *id) {
   int ret;
 
-  // This triggers report_fixup internally
+  // Triggers report_fixup internally
   ret = hid_parse(hdev);
   if (ret) {
     hid_err(hdev, "Parse failed\n");
     return ret;
   }
 
-  // Start hardware
   ret = hid_hw_start(hdev, HID_CONNECT_DEFAULT);
   if (ret) {
     hid_err(hdev, "HW start failed\n");
@@ -60,7 +61,9 @@ static int kreo_probe(struct hid_device *hdev, const struct hid_device_id *id) {
 static void kreo_remove(struct hid_device *hdev) { hid_hw_stop(hdev); }
 
 static const struct hid_device_id kreo_devices[] = {
-    {HID_USB_DEVICE(KREO_VID, KREO_PID)}, {}};
+    {HID_USB_DEVICE(KREO_VID, KREO_PID)},
+    {HID_USB_DEVICE(KREO_VID, KREO_PID_WIRED)},
+    {}};
 MODULE_DEVICE_TABLE(hid, kreo_devices);
 
 static struct hid_driver kreo_side_driver = {
