@@ -12,6 +12,10 @@ Compile
 ```
 $ make
 ```
+or if your kernel was built with clang
+```
+$ make LLVM=1
+```
 
 Load module
 ```
@@ -28,9 +32,11 @@ Unload module
 Install module
 ```
 # mkdir -p /lib/modules/$(uname -r)/extra
-
+```
+```
 # cp kreo-fixup.ko /lib/modules/$(uname -r)/extra/
-
+```
+```
 # depmod -a
 ```
 
