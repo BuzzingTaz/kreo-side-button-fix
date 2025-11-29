@@ -34,7 +34,7 @@ Install module
 # mkdir -p /lib/modules/$(uname -r)/extra
 ```
 ```
-# cp kreo-fixup.ko /lib/modules/$(uname -r)/extra/
+# cp kreo_side_fixup.ko /lib/modules/$(uname -r)/extra/
 ```
 ```
 # depmod -a
