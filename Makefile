@@ -20,6 +20,8 @@ obj-m += kreo_side_fixup.o
 
 all: build
 
+full: build install load
+
 build:
 	make -C $(KERNEL_DIR)/build M=$(CURDIR) $(LLVM_FLAG) modules
 
